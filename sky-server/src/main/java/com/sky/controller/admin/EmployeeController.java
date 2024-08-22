@@ -49,7 +49,7 @@ public class EmployeeController {
         String token = JwtUtil.createJWT(
                 jwtProperties.getAdminSecretKey(),
                 jwtProperties.getAdminTtl(),
-                claims);
+                claims);//token源于jwtproperties文件中的函数调用
 
         EmployeeLoginVO employeeLoginVO = EmployeeLoginVO.builder()
                 .id(employee.getId())
