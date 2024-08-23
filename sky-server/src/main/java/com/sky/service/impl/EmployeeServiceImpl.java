@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
+    //注入操作
     @Autowired
     private EmployeeMapper employeeMapper;
 
@@ -76,6 +77,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         //由于前端传入的类型与实际后端需要进行操作的类型是不一致的，因此需要进行强制类型转换
         Employee employee=new Employee();
 
+        //后面代码中展示的都是之后需要自己添加的，而不是通过前端传入的，前端传入的默认已经添加完成
         //使用对象的属性拷贝将数据批量的进行赋值
         //这样的前提是属性名是必须一致的前提
         BeanUtils.copyProperties(employeeDTO,employee);
