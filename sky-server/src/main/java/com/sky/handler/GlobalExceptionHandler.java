@@ -1,5 +1,6 @@
 package com.sky.handler;
 
+import com.sky.constant.MessageConstant;
 import com.sky.exception.BaseException;
 import com.sky.result.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -40,8 +41,11 @@ public class GlobalExceptionHandler {
             String[] split = message.split(" ");
             //希望通过报错信息获得对应名字
             String username = split[2];
-            String msg=username+"已存在";
+            String msg=username+ MessageConstant.ALREADY_EXISTS;
             return Result.error(msg);
+        }else {
+            //出现未知的错误
+            return Result.error(MessageConstant.UNKNOWN_ERROR);
         }
     }
 }
