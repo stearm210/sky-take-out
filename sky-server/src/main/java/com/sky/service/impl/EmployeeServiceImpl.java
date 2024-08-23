@@ -91,6 +91,13 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setCreateTime(LocalDateTime.now());
         employee.setUpdateTime(LocalDateTime.now());
 
+        //设置当前创建人id和修改人的id
+        // TODO 后期需要改为当前登录用户的id
+        employee.setCreateUser(10L);
+        employee.setUpdateUser(10L);
+
+        //调用dao层进行注入调用
+        employeeMapper.insert(employee);
     }
 
 }
