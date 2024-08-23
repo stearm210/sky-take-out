@@ -2,6 +2,7 @@ package com.sky.service.impl;
 
 import com.sky.constant.MessageConstant;
 import com.sky.constant.StatusConstant;
+import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
@@ -9,6 +10,7 @@ import com.sky.exception.AccountNotFoundException;
 import com.sky.exception.PasswordErrorException;
 import com.sky.mapper.EmployeeMapper;
 import com.sky.service.EmployeeService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -57,6 +59,22 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         //3、返回实体对象
         return employee;
+    }
+
+    /*
+    * 新增员工实现类方法
+    * */
+    @Override
+    public void save(EmployeeDTO employeeDTO) {
+        //由于前端传入的类型与实际后端需要进行操作的类型是不一致的，因此需要进行强制类型转换
+        Employee employee=new Employee();
+        //使用对象的属性拷贝将数据批量的进行赋值
+        //这样的前提是属性名是必须一致的前提
+        BeanUtils.copyProperties(employeeDTO,employee);
+
+        //设置账号的状态，默认是正常的,这里调用了常量类
+        employee.setStatus(StatusConstant.ENABLE);
+
     }
 
 }
