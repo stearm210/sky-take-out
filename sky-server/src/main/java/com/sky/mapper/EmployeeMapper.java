@@ -19,7 +19,7 @@ public interface EmployeeMapper {
 	/*
 	* 插入员工数据，属于单表的新增操作
 	* */
-	@Insert("insert into employee (name, username, phone, sex, id_number, create_time, update_time, create_user, update_user,status)" +
-			"values "+ "(#{name},#{username},#{phone},#{sex},#{idNumber},#{createTime},#{updateTime},#{createUser},#{updateUser},#{status})")
+	@Insert("insert into employee (name, username,password, phone, sex, id_number, create_time, update_time, create_user, update_user,status)" +
+			"values "+ "(#{name},#{username},#{password},#{phone},#{sex},#{idNumber},#{createTime},#{updateTime},#{createUser},#{updateUser},#{status})")
 	void insert(Employee employee);
 }
