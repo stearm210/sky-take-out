@@ -94,6 +94,10 @@ public class EmployeeController {
     @ApiOperation("新增员工")
     public Result save(@RequestBody EmployeeDTO employeeDTO){
         log.info("新增员工:{}", employeeDTO);//新增员工之操作
+
+        //输出当前线程的id
+        System.out.println("当前线程的ID输出:"+Thread.currentThread().getId());
+
         employeeService.save(employeeDTO);
         return Result.success();
     }

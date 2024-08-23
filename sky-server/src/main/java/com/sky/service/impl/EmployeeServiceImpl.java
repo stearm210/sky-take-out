@@ -74,6 +74,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         * 这里将新增员工的所有信息进行定义，分别进行赋值等操作
         * */
 
+        //输出当前线程的id
+        System.out.println("当前线程的ID输出:"+Thread.currentThread().getId());
+
         //由于前端传入的类型与实际后端需要进行操作的类型是不一致的，因此需要进行强制类型转换
         Employee employee=new Employee();
 
