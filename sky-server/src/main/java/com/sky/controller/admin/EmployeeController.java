@@ -42,8 +42,9 @@ public class EmployeeController {
      * @param employeeLoginDTO
      * @return
      */
-    @ApiOperation(value = "员工登录功能")
+
     @PostMapping("/login")
+    @ApiOperation(value = "员工登录功能")
     public Result<EmployeeLoginVO> login(@RequestBody EmployeeLoginDTO employeeLoginDTO) {
         log.info("员工登录：{}", employeeLoginDTO);
 
