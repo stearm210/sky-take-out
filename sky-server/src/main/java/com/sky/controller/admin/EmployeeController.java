@@ -1,6 +1,7 @@
 package com.sky.controller.admin;
 
 import com.sky.constant.JwtClaimsConstant;
+import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.entity.Employee;
 import com.sky.properties.JwtProperties;
@@ -12,6 +13,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +38,9 @@ public class EmployeeController {
     private EmployeeService employeeService;
     @Autowired
     private JwtProperties jwtProperties;
+	@Qualifier("reactiveRedisTemplate")
+	@Autowired
+	private ReactiveRedisTemplate reactiveRedisTemplate;
 
     /**
      * 登录
@@ -79,4 +85,16 @@ public class EmployeeController {
         return Result.success();
     }
 
+    /*
+    * 新增员工功能开发
+    * */
+    //提交过来的是json格式的数据，因此需要加上@requestbody的注解
+    @PostMapping
+    //加上接口文档
+    @ApiOperation("新增员工")
+    public Result save(@RequestBody EmployeeDTO employeeDTO){
+        log.info("新增员工:{}", employeeDTO);//新增员工之操作
+        employeeService.save(employeeDTO);
+        return null;
+    }
 }
