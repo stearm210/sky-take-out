@@ -81,12 +81,17 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 
     /*
     * 拓展spring mvc框架的消息转化器，可以将java序列化对象转换为json数据
+    * 主要是希望数据传给前端的时候，日期数据可以在前端页面中正常的显示
     * */
     protected void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+        log.info("扩展消息转换器...");
         //创建一个消息转换器对象
         MappingJackson2CborHttpMessageConverter converter=new MappingJackson2CborHttpMessageConverter();
         //需要为消息转换器设置一个对象转换器，对象转换器可以将java对象序列化为json数据
         converter.setObjectMapper(new JacksonObjectMapper());
+        //将自己的消息转化器加入容器中
+        //优先使用自己的消息转换器
+        converters.add(0,converter);
     }
 
 }
