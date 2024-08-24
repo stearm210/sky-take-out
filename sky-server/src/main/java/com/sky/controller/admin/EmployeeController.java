@@ -126,6 +126,7 @@ public class EmployeeController {
     //这里使用的是路径参数(status放在了占位符中，因此需要使用@pathvariable进行调用)，因此需要使用PathVariable注解
     public Result startOrStop(@PathVariable Integer status, Long id){
         log.info("启用禁用员工账号:{},{}",status,id);
+        employeeService.startOrStop(status,id);
         return Result.success();
     }
 

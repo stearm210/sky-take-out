@@ -30,4 +30,9 @@ public interface EmployeeMapper {
 	* */
 	//这里使用到了动态SQL，因此建议在xml映射文件中编写对应的SQL代码
 	Page<Employee> pageQuery(EmployeePageQueryDTO employeePageQueryDTO);
+
+	/*
+	*根据主键来动态的调整和修改语句
+	* */
+	void update(Employee employee);
 }
