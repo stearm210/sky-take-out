@@ -1,5 +1,6 @@
 package com.sky.service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.PasswordConstant;
@@ -118,7 +119,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         //使用PageHelper开始查询分页
         //这里分别传送了分页以及页码的大小问题
         PageHelper.startPage(employeePageQueryDTO.getPage(),employeePageQueryDTO.getPageSize());
+
+        //由于上面使用了插件，返回值必须是page
+        //这里最终得到了一个page对象
+        Page<Employee> page= employeeMapper.pageQuery(employeePageQueryDTO);
         return null;
+
     }
 
 }
