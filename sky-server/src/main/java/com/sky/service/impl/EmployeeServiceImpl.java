@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -123,7 +124,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         //由于上面使用了插件，返回值必须是page
         //这里最终得到了一个page对象
         Page<Employee> page= employeeMapper.pageQuery(employeePageQueryDTO);
-        return null;
+
+        long total = page.getTotal();
+        List<Employee> records = page.getResult();
+        return new PageResult(total,records);
 
     }
 
