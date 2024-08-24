@@ -47,7 +47,7 @@ public class EmployeeController {
      * @param employeeLoginDTO
      * @return
      */
-
+    //提交过来的是json格式的数据，因此需要加上@requestbody的注解
     @PostMapping("/login")
     @ApiOperation(value = "员工登录功能")
     public Result<EmployeeLoginVO> login(@RequestBody EmployeeLoginDTO employeeLoginDTO) {
@@ -118,5 +118,15 @@ public class EmployeeController {
     }
 
 
+    /*
+    * 启用禁用员工账号
+    * */
+    @PostMapping("/status/{status}")
+    @ApiOperation("启用禁用员工账号")
+    //这里使用的是路径参数(status放在了占位符中，因此需要使用@pathvariable进行调用)，因此需要使用PathVariable注解
+    public Result startOrStop(@PathVariable Integer status, Long id){
+        log.info("启用禁用员工账号:{},{}",status,id);
+        return Result.success();
+    }
 
 }
