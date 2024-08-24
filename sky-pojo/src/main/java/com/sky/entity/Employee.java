@@ -33,7 +33,7 @@ public class Employee implements Serializable {
 
     private Integer status;
 
-    //JsonFormat，加上注解，使得返回的时间不是数组格式而是一个整体。JsonFormat是json格式的注解
+    //JsonFormat，加上注解，使得返回的时间不是数组格式而是一个整体。JsonFormat是json格式
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;
 
