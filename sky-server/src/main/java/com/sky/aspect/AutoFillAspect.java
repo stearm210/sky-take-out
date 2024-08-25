@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 
+//下面是一个很典型的切面类定义步骤，需要学会
 /*
 *自定义的切面类，实现公共字段自定义填充逻辑
 * */
@@ -27,20 +28,20 @@ import java.time.LocalDateTime;
 @Aspect
 //加入aop容器
 @Component
-//lombok中进行操作
+//lombok控制台中进行操作
 @Slf4j
 public class AutoFillAspect {
 	//切入点
 	/*
 	* 对哪些类、哪些方法进行拦截
 	* */
-	//拦截对应包下的类与方法,并且满足加上了AutoFill注解的类
+	//1.拦截对应包下的类与方法,并且满足加上了AutoFill注解的类
 	@Pointcut("execution(* com.sky.mapper.*.*(..)) && @annotation(com.sky.annotation.AutoFill)")
 	public void autoFillPointCut(){
 
 	}
 
-	//前置通知，在通知中进行公共字段的赋值
+	//2.前置通知，在通知中进行公共字段的赋值
 	/*
 	* 前置通知，在通知中进行公共字段的赋值
 	* */
@@ -49,28 +50,29 @@ public class AutoFillAspect {
 		//公共字段的自动填充
 		log.info("开始进行公共字段自动填充");
 
-		//一般来说是通过连接点获得对应的参数
+		//3.一般来说是通过连接点获得对应的参数
 		//获取当前被拦截的方法的数据库操作类型
-		//signature这里拦截到的是
+		//signature这里拦截到的是上面代码写的类或者方法
 		MethodSignature signature = (MethodSignature) joinPoint.getSignature();//方法签名对象
 		AutoFill autoFill=signature.getMethod().getAnnotation(AutoFill.class);//获得方法上的注解对象
 		OperationType operationType=autoFill.value();//获得数据库操作类型(是update还是insert)
 
 
-		//获取到当前被拦截的方法的参数--实体对象
+		//4.获取到当前被拦截的方法的参数--实体对象
 		Object[] args = joinPoint.getArgs();
+		//下面是一个判断如果对象为空时应该怎么操作
 		if (args == null || args.length == 0){
 			return;
 		}
 
-		//这里得到了对应的实体对象
+		//5.这里得到了对应的实体对象
 		Object entity=args[0];
 
-		//准备赋值的数据
+		//6.准备赋值的数据.这里指的是需要进行自动赋值的属性是什么
 		LocalDateTime now=LocalDateTime.now();
 		Long currentId= BaseContext.getCurrentId();//获得对应的操作id
 
-		//根据当前不同的操作类型，为对应的属性通过反射来进行赋值
+		//7.根据当前不同的操作类型，为对应的属性通过反射来进行赋值
 		//如果是插入操作的话，需要进行怎样的操作
 		if (operationType == OperationType.INSERT){
 			//如果是插入操作，则需要为4个公共字段进行赋值
@@ -91,7 +93,7 @@ public class AutoFillAspect {
 				e.printStackTrace();
 			}
 		} else if (operationType == OperationType.UPDATE) {
-			//如果是更新操作，则需要对两个字段进行赋值
+			//8.如果是更新操作，则需要对两个字段进行赋值
 			//如果是插入操作，则需要为4个公共字段进行赋值
 			try {
 				//下面是获得方法的操作
