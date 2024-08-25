@@ -75,7 +75,7 @@ public class AutoFillAspect {
 		if (operationType == OperationType.INSERT){
 			//如果是插入操作，则需要为4个公共字段进行赋值
 			try {
-				//下面的操作对公共属性进行了更加快速的定义操作
+				//下面是获得方法的操作
 				Method setCreateTime = entity.getClass().getDeclaredMethod(AutoFillConstant.SET_CREATE_TIME, LocalDateTime.class);
 				Method setCreateUser = entity.getClass().getDeclaredMethod(AutoFillConstant.SET_CREATE_USER, Long.class);
 				Method setUpdateTime = entity.getClass().getDeclaredMethod(AutoFillConstant.SET_UPDATE_TIME, LocalDateTime.class);
@@ -94,6 +94,7 @@ public class AutoFillAspect {
 			//如果是更新操作，则需要对两个字段进行赋值
 			//如果是插入操作，则需要为4个公共字段进行赋值
 			try {
+				//下面是获得方法的操作
 				Method setUpdateTime = entity.getClass().getDeclaredMethod(AutoFillConstant.SET_UPDATE_TIME, LocalDateTime.class);
 				Method setUpdateUser = entity.getClass().getDeclaredMethod(AutoFillConstant.SET_UPDATE_USER, Long.class);
 
