@@ -39,6 +39,7 @@ public class CategoryServiceImpl implements CategoryService {
      * 新增分类
      * @param categoryDTO
      */
+    //CategoryDTO为对应的模版类型
     public void save(CategoryDTO categoryDTO) {
         Category category = new Category();
         //属性拷贝
