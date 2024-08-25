@@ -30,6 +30,7 @@ public class CategoryController {
      * @param categoryDTO
      * @return
      */
+    //其余方法一般为post方法
     @PostMapping
     @ApiOperation("新增分类")
     public Result<String> save(@RequestBody CategoryDTO categoryDTO){
@@ -69,6 +70,7 @@ public class CategoryController {
      * @param categoryDTO
      * @return
      */
+    //修改一般使用put方法
     @PutMapping
     @ApiOperation("修改分类")
     public Result<String> update(@RequestBody CategoryDTO categoryDTO){
@@ -82,6 +84,7 @@ public class CategoryController {
      * @param id
      * @return
      */
+    //未修改数据，一般使用postmapping注解
     @PostMapping("/status/{status}")
     @ApiOperation("启用禁用分类")
     public Result<String> startOrStop(@PathVariable("status") Integer status, Long id){
