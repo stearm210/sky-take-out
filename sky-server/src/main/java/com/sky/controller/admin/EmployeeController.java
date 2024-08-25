@@ -130,4 +130,27 @@ public class EmployeeController {
         return Result.success();
     }
 
+    /*
+    * 根据id来查询员工数据
+    * */
+    @GetMapping("/{id}")
+    @ApiOperation("根据id来查询员工信息")
+    public Result<Employee> getById(@PathVariable Long id){
+        Employee employee=employeeService.getById(id);
+        return Result.success(employee);
+    }
+
+    /*
+    * 编辑员工信息
+    * */
+    @PutMapping
+    @ApiOperation("编辑员工信息")
+    //这里使用之前使用过的EmployeeDTO格式来接收对应的数据
+    //一般来说，requestbody用于json格式的对象接收
+    public Result update(@RequestBody EmployeeDTO employeeDTO){
+        log.info("编辑员工信息:{}", employeeDTO);
+        employeeService.update(employeeDTO);
+        return Result.success();
+    }
+
 }
