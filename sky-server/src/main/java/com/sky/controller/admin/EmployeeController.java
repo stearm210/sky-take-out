@@ -121,6 +121,7 @@ public class EmployeeController {
     /*
     * 启用禁用员工账号
     * */
+    //post推送
     @PostMapping("/status/{status}")
     @ApiOperation("启用禁用员工账号")
     //这里使用的是路径参数(status放在了占位符中，因此需要使用@pathvariable进行调用)，因此需要使用PathVariable注解
@@ -133,6 +134,7 @@ public class EmployeeController {
     /*
     * 根据id来查询员工数据
     * */
+    //get查询
     @GetMapping("/{id}")
     @ApiOperation("根据id来查询员工信息")
     public Result<Employee> getById(@PathVariable Long id){
@@ -143,6 +145,7 @@ public class EmployeeController {
     /*
     * 编辑员工信息
     * */
+    //put修改
     @PutMapping
     @ApiOperation("编辑员工信息")
     //这里使用之前使用过的EmployeeDTO格式来接收对应的数据
