@@ -98,14 +98,17 @@ public class EmployeeServiceImpl implements EmployeeService {
         //这个密码要放到数据库中，因此这个密码需要进行加密
         employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
 
+        /*
+        * 公共属性问题，这里可以不需要进行赋值,因为前面实现了一个切面类会更加的方便
+        * */
         //设置当前记录的创建时间和修改时间
-        employee.setCreateTime(LocalDateTime.now());
+        /*employee.setCreateTime(LocalDateTime.now());
         employee.setUpdateTime(LocalDateTime.now());
 
         //设置当前创建人id和修改人的id
         //前面拦截器中已经将用户的ID存入储存中，这里从线程的存储中获得对应的用户id
         employee.setCreateUser(BaseContext.getCurrentId());
-        employee.setUpdateUser(BaseContext.getCurrentId());
+        employee.setUpdateUser(BaseContext.getCurrentId());*/
 
         //调用dao层进行注入调用
         employeeMapper.insert(employee);
@@ -163,10 +166,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         //这里将DTO中的属性批量的赋值到employee中的属性
         BeanUtils.copyProperties(employeeDTO,employee);
 
-        //设置employee中的修改时间
+        //切面类中已经将对类似值进行了规范
+        /*//设置employee中的修改时间
         employee.setUpdateTime(LocalDateTime.now());
         //设置employee中的修改者
-        employee.setUpdateUser(BaseContext.getCurrentId());
+        employee.setUpdateUser(BaseContext.getCurrentId());*/
 
         employeeMapper.update(employee);
     }
