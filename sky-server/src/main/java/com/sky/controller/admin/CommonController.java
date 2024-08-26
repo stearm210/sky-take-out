@@ -53,6 +53,9 @@ public class CommonController {
 		} catch (IOException e) {
 			log.error("文件上传失败:{}",e);
 		}
-		return null;
+
+		//上面是文件上传成功时的代码
+		//下面是文件上传失败后的代码
+		return Result.error("文件上传失败");
 	}
 }
