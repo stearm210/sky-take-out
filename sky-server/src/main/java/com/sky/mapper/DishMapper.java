@@ -31,6 +31,7 @@ public interface DishMapper {
 
 	/*
 	* 菜品的分页查询
+	* 这个sql在xml文件中进行编写
 	* */
 	//动态sql
 	Page<DishVO> pageQuery(DishPageQueryDTO dishPageQueryDTO);

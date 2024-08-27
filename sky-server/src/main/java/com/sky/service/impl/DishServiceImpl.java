@@ -71,7 +71,9 @@ public class DishServiceImpl implements DishService {
 	@Override
 	public PageResult pageQuery(DishPageQueryDTO dishPageQueryDTO) {
 		//分页查询专用pagehelper
+		//startpage中的参数分别为需要查询的页码和查询的个数
 		PageHelper.startPage(dishPageQueryDTO.getPage(),dishPageQueryDTO.getPageSize());
+		//最终返回一个dishvo格式的page
 		Page<DishVO> page=dishMapper.pageQuery(dishPageQueryDTO);
 
 		//返回总记录数和数据集合
