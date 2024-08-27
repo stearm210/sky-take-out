@@ -2,12 +2,16 @@ package com.sky.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sky.constant.MessageConstant;
+import com.sky.constant.StatusConstant;
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
+import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.DishFlavorMapper;
+import com.sky.mapper.SetmealDishMapper;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
 import com.sky.vo.DishVO;
@@ -26,6 +30,10 @@ public class DishServiceImpl implements DishService {
 	private DishMapper dishMapper;
 	@Autowired
 	private DishFlavorMapper dishFlavorMapper;
+
+	//注入菜品表关联查询的套餐表查询对象
+	@Autowired
+	private SetmealDishMapper setmealDishMapper;
 
 
 	/*
@@ -86,6 +94,35 @@ public class DishServiceImpl implements DishService {
 	* */
 	@Override
 	public void deleteBatch(List<Long> ids) {
+		// 判断当前的菜品是否能够删除--是否存在起售中的菜品
+		for (Long id : ids) {
+			//查询将要删除的菜品的id，确保删除
+			Dish dish=dishMapper.getById(id);
+			if (dish.getStatus() == StatusConstant.ENABLE){
+				//当前的菜品处于起售状态，不能删除
+				//因此这里抛出异常
+				throw new DeletionNotAllowedException(MessageConstant.DISH_ON_SALE);
 
+			}
+		}
+
+		//判断当前的菜品是否能够删除--是否被套餐关联
+		//由于查询的套餐关系表是一个新的表，因此需要新设置一个mapper进行查询,也就是说需要查询是否有套餐表进行关联
+		List<Long> setmealIds = setmealDishMapper.getSetmealDishIds(ids);
+		//如果在套餐中查到对应的id，那就是表明确实有关联
+		if (setmealIds != null && setmealIds.size() > 0) {
+			//当前菜品被套餐关联了，不能删除
+			throw new DeletionNotAllowedException(MessageConstant.DISH_BE_RELATED_BY_SETMEAL);
+		}
+
+
+		//删除菜品表中的菜品数据
+		//遍历集合，主要用于删除
+		for (Long id : ids) {
+			dishMapper.deleteById(id);
+			//删除菜品关联的口味数据
+			dishFlavorMapper.deleteByDishId(id);
+
+		}
 	}
 }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.SetmealDishMapper">
+
+	<select id="getSetmealDishIds" resultType="java.lang.Long">
+		select setmeal_id from setmeal_dish where dish_id in
+		/*collection：表示集合，数据源
+		item ：表示集合中的每一个元素
+		index ：用于表示在迭代过程中，每次迭代到的位置
+		separator ：表示在迭代时数据以什么符号作为分隔符
+		open ：表示该语句以什么开始
+		close ：表示以什么结束*/
+# 		foreach主要用于批量的操作数据，操作的范围有列表、集合等
+    <foreach collection="dishIds" item="dishId" separator="," open="(" close=")">
+    #{dish}
+    </foreach>
+
+	</select>
+</mapper>
