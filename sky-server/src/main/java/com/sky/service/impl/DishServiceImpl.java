@@ -79,4 +79,13 @@ public class DishServiceImpl implements DishService {
 		//返回总记录数和数据集合
 		return new PageResult(page.getTotal(),page.getResult());
 	}
+
+
+	/*
+	* 菜品的批量删除操作
+	* */
+	@Override
+	public void deleteBatch(List<Long> ids) {
+
+	}
 }
