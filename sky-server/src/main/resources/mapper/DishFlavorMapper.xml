@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.sky.mapper.DishFlavorMapper">
 
 
 	<insert id="insertBatch">
-# 注意，这里是一个集合对象，因此需要使用循环的方式进行遍历操作
-#这里的循环使用了,号进行了分隔。这里每次遍历都会加上一个逗号进行分隔操作
-#注意，这里的dishid是没有传入进来的
+		# 注意，这里是一个集合对象，因此需要使用循环的方式进行遍历操作
+		#这里的循环使用了,号进行了分隔。这里每次遍历都会加上一个逗号进行分隔操作
+		#注意，这里的dishid是没有传入进来的
 		insert into dish_flavor(dish_id, name, value) VALUES
-	    <foreach collection="flavors" item="df" separator=",">
-(#{df.dishId},#{df.name},#{df,value})
-	    </foreach>
+		<foreach collection="flavors" item="df" separator=",">
+			(#{df.dishId},#{df.name},#{df,value})
+		</foreach>
 	</insert>
+	<!--/*
+	* 根据菜品id集合批量删除关联的口味数据
+	* */-->
+	<delete id="deleteByDishIds">
+		delete from sky_take_out.dish_flavor where dish_id
+		<foreach collection="dishIds" open="(" close=")" separator="," item="dishId">
+			#{dishId}
+		</foreach>
+	</delete>
 </mapper>
