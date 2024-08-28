@@ -6,6 +6,7 @@ import com.sky.dto.DishPageQueryDTO;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.DishService;
+import com.sky.vo.DishVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -61,5 +62,14 @@ public class DishController {
 		log.info("菜品的批量删除:{}",ids);
 		dishService.deleteBatch(ids);
 		return Result.success();
+	}
+
+	/*
+	* 根据ip来查询菜品id信息
+	* */
+	//这是一个detmapping方法，用于查询菜品id对应的信息
+	@GetMapping("/{id}")
+	public Result<DishVO> getById(@PathVariable Long id){
+		return null;
 	}
 }
