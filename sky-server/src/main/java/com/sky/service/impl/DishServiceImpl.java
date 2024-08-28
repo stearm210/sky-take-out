@@ -37,12 +37,12 @@ public class DishServiceImpl implements DishService {
 
 
 	/*
-	* 新增菜品的操作
-	* 这里的函数涉及到菜品表和口味表的操作
-	* 因此需要对这两个表进行操作
-	* 那这样就涉及到了多个表的操作问题，因此需要使用事务进行操作以保证事务的一致性
-	* 这种要不全部成功要不全部失败
-	* */
+	 * 新增菜品的操作
+	 * 这里的函数涉及到菜品表和口味表的操作
+	 * 因此需要对这两个表进行操作
+	 * 那这样就涉及到了多个表的操作问题，因此需要使用事务进行操作以保证事务的一致性
+	 * 这种要不全部成功要不全部失败
+	 * */
 	@Transactional
 	public void saveWithFlavor(DishDTO dishDTO) {
 		//传入菜品数据
@@ -74,8 +74,8 @@ public class DishServiceImpl implements DishService {
 	}
 
 	/*
-	* 菜品分页查询
-	* */
+	 * 菜品分页查询
+	 * */
 	@Override
 	public PageResult pageQuery(DishPageQueryDTO dishPageQueryDTO) {
 		//分页查询专用pagehelper
@@ -90,8 +90,8 @@ public class DishServiceImpl implements DishService {
 
 
 	/*
-	* 菜品的批量删除操作
-	* */
+	 * 菜品的批量删除操作
+	 * */
 	@Override
 	public void deleteBatch(List<Long> ids) {
 		// 判断当前的菜品是否能够删除--是否存在起售中的菜品
@@ -131,5 +131,13 @@ public class DishServiceImpl implements DishService {
 		//根据菜品id集合批量删除关联的口味数据
 		//sql:delete from dish_flavor where dish_id in(?,?,?)
 		dishFlavorMapper.deleteByDishIds(ids);
+	}
+
+	   /*
+	   * 根据id来查询菜品和对应的口味数据
+	   * */
+	   @Override
+	public void getByIdWithFlavor() {
+
 	}
 }

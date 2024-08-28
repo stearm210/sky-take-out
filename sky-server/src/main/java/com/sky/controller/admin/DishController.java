@@ -3,6 +3,7 @@ package com.sky.controller.admin;
 
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
+import com.sky.entity.Dish;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.DishService;
@@ -72,6 +73,7 @@ public class DishController {
 	@ApiOperation("根据id来查询菜品")
 	public Result<DishVO> getById(@PathVariable Long id){
 		log.info("根据id来查询菜品:{}",id);
-		return null;
+		DishVO dishVO = dishService.getByIdWithFlavor(id);
+		return Result.success(dishVO);
 	}
 }

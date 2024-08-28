@@ -24,4 +24,9 @@ public interface DishService {
 	* 菜品的批量删除操作
 	* */
 	void deleteBatch(List<Long> ids);
+
+	/*
+	* 根据id来查询菜品和对应的口味数据
+	* */
+	void getByIdWithFlavor();
 }
