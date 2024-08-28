@@ -37,9 +37,9 @@
     </select>
 
     <!-- 动态的修改菜品   -->
+<!--    #             使用set字段进行修改操作-->
     <update id="update">
         update dish
-#             使用set字段进行修改操作
         <set>
             <if test="name != null">name = #{name},</if>
             <if test="categoryId != null">category_id = #{categoryId},</if>
