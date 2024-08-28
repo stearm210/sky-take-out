@@ -166,8 +166,18 @@ public class DishServiceImpl implements DishService {
 		dishMapper.update(dish);
 
 		//先删除原先的口味数据
-
+		dishFlavorMapper.deleteByDishId(dishDTO.getId());
 
 		//之后再次重新插入新的口味数据
+		//在dishDTO中获得口味数据
+		List<DishFlavor> flavors = dishDTO.getFlavors();
+		if (flavors != null && flavors.size() > 0) {
+			//批量插入数据的时候，需要进行遍历，对插入的数据进行赋值
+			flavors.forEach(dishFlavor -> {
+				dishFlavor.setDishId(dishDTO.getId());
+			});
+			//向口味表中插入n条数据
+			dishFlavorMapper.insertBatch(flavors);
+		}
 	}
 }
