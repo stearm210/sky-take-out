@@ -10,6 +10,8 @@
 
     </insert>
 
+
+
     <!--根据id来批量的删除菜品数据-->
     <delete id="deleteByIds">
         delete from sky_take_out.dish where id in
@@ -33,4 +35,21 @@
         </where>
         order by d.create_time desc
     </select>
+
+    <!-- 动态的修改菜品   -->
+    <update id="update">
+        update dish
+#             使用set字段进行修改操作
+        <set>
+            <if test="name != null">name=#{name},</if>
+            <if test="categoryId != null">category_id=#{categoryId},</if>
+            <if test="price != null">price=#{price},</if>
+            <if test="image != null">image=#{image},</if>
+            <if test="description != null">description=#{description},</if>
+            <if test="status != null">status=#{status},</if>
+            <if test="updateTime != null">update_time=#{updateTime},</if>
+            <if test="updateUser != null">update_user=#{updateUser},</if>
+        </set>
+        where id = #{id}
+    </update>
 </mapper>

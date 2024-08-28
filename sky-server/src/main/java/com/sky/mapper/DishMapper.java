@@ -56,4 +56,14 @@ public interface DishMapper {
 	* 根据id来批量的删除菜品数据
 	* */
 	void deleteByIds(List<Long> ids);
+
+	/*
+	* 更新菜品信息，建议写成动态sql形式
+	* */
+	/*
+	* 根据id来动态的修改菜品
+	* */
+	//同时这里写一个自动填充方便开发操作
+	@AutoFill(value = OperationType.UPDATE)
+	void update(Dish dish);
 }

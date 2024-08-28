@@ -30,4 +30,9 @@ public interface DishService {
 	* 根据id来查询菜品和对应的口味数据
 	* */
 	DishVO getByIdWithFlavor(Long id);
+
+	/*
+	* 根据id来修改菜品基本信息和对应的口味信息
+	* */
+	void updateWithFlavor(DishDTO dishDTO);
 }
