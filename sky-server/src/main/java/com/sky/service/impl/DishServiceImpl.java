@@ -50,7 +50,7 @@ public class DishServiceImpl implements DishService {
 		Dish dish = new Dish();
 		//数据拷贝，从一个类到另一个类
 		//这里将菜品的数据拷贝到对应的类中
-		BeanUtils.copyProperties(dishDTO,dish);
+		BeanUtils.copyProperties(dishDTO, dish);
 
 		//菜品表插入1条数据
 		dishMapper.insert(dish);
@@ -80,12 +80,12 @@ public class DishServiceImpl implements DishService {
 	public PageResult pageQuery(DishPageQueryDTO dishPageQueryDTO) {
 		//分页查询专用pagehelper
 		//startpage中的参数分别为需要查询的页码和查询的个数
-		PageHelper.startPage(dishPageQueryDTO.getPage(),dishPageQueryDTO.getPageSize());
+		PageHelper.startPage(dishPageQueryDTO.getPage(), dishPageQueryDTO.getPageSize());
 		//最终返回一个dishvo格式的page
-		Page<DishVO> page=dishMapper.pageQuery(dishPageQueryDTO);
+		Page<DishVO> page = dishMapper.pageQuery(dishPageQueryDTO);
 
 		//返回总记录数和数据集合
-		return new PageResult(page.getTotal(),page.getResult());
+		return new PageResult(page.getTotal(), page.getResult());
 	}
 
 
@@ -97,8 +97,8 @@ public class DishServiceImpl implements DishService {
 		// 判断当前的菜品是否能够删除--是否存在起售中的菜品
 		for (Long id : ids) {
 			//查询将要删除的菜品的id，确保删除
-			Dish dish=dishMapper.getById(id);
-			if (dish.getStatus() == StatusConstant.ENABLE){
+			Dish dish = dishMapper.getById(id);
+			if (dish.getStatus() == StatusConstant.ENABLE) {
 				//当前的菜品处于起售状态，不能删除
 				//因此这里抛出异常
 				throw new DeletionNotAllowedException(MessageConstant.DISH_ON_SALE);
@@ -133,11 +133,24 @@ public class DishServiceImpl implements DishService {
 		dishFlavorMapper.deleteByDishIds(ids);
 	}
 
-	   /*
-	   * 根据id来查询菜品和对应的口味数据
-	   * */
-	   @Override
-	public void getByIdWithFlavor() {
+	/*
+	 * 根据id来查询菜品和对应的口味数据
+	 * */
 
+	public DishVO getByIdWithFlavor(Long id) {
+		//根据id查询菜品数据
+		Dish dish = dishMapper.getById(id);
+
+		//根据菜品id查询口味数据
+		List<DishFlavor> dishFlavors = dishFlavorMapper.deleteByDishId(id);
+
+		//将查到的数据进行对应的封装
+		//将查询到的数据封装到VO
+		//基础的属性进行拷贝
+		DishVO dishVO = new DishVO();
+		BeanUtils.copyProperties(dish, dishVO);//将菜品的数据赋值进去
+		//之后将菜品id查到的口味数据一起赋值进dishVO重
+		dishVO.setFlavors(dishFlavors);
+		return dishVO;
 	}
 }
