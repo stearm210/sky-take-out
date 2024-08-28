@@ -37,7 +37,6 @@
     </select>
 
     <!-- 动态的修改菜品   -->
-<!--    #             使用set字段进行修改操作-->
     <update id="update">
         update dish
         <set>
