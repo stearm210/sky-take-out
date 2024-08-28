@@ -69,7 +69,9 @@ public class DishController {
 	* */
 	//这是一个detmapping方法，用于查询菜品id对应的信息
 	@GetMapping("/{id}")
+	@ApiOperation("根据id来查询菜品")
 	public Result<DishVO> getById(@PathVariable Long id){
+		log.info("根据id来查询菜品:{}",id);
 		return null;
 	}
 }
