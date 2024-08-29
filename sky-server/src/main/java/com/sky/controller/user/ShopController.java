@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 //用户端的接口编写
 //指定名字，防止同名类冲突
 @RestController("userShopController")
-@RequestMapping("/admin/shop")
+@RequestMapping("/user/shop")
 @Api(tags = "店铺相关接口")
 @Slf4j
 public class ShopController{
