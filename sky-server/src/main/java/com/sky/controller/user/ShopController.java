@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
-
 //用户端的接口编写
 //指定名字，防止同名类冲突
 @RestController("userShopController")
