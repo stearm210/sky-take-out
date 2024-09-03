@@ -4,7 +4,9 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
-
+/*
+* 微信小程序的配置问题
+* */
 @Component
 @ConfigurationProperties(prefix = "sky.wechat")
 @Data
