@@ -56,5 +56,10 @@ sky:
     access-key-secret: ${sky.alioss.access-key-secret}
     bucket-name: ${sky.alioss.bucket-name}
 
+  #微信小程序配置问题
+  #具体值写在另一个配置文件中
+  wechat:
+    appid: ${sky.wechat.appid}
+    secret: ${sky.wechat.secret}
 
 
