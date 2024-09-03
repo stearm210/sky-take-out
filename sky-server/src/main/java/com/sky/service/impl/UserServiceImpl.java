@@ -25,6 +25,7 @@ public class UserServiceImpl implements UserService {
 	public static final String WX_LOGIN = "https://api.weixin.qq.com/sns/jscode2session";
 
 	//注入配置属性类
+	@Autowired
 	private WeChatProperties weChatProperties;
 
 	//openid的操作
