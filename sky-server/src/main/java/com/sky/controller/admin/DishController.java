@@ -87,4 +87,27 @@ public class DishController {
 		dishService.updateWithFlavor(dishDTO);
 		return Result.success();
 	}
+
+	/*
+	* 菜品的起售和停售
+	* */
+	@PostMapping("/status/{status}")
+	@ApiOperation("菜品起售停售")
+	//使用路径参数，用于判断{status}
+	///这里的id是指菜品的id
+	public Result<String> startOrStop(@PathVariable Integer status, Long id){
+		dishService.startOrStop(status,id);
+		return Result.success();
+	}
+
+
+	/*
+	 * 根据分类id查询菜品信息
+	 * */
+	@GetMapping("/list")
+	@ApiOperation("根据分类id查询菜品")
+	public Result<List<Dish>> list(Long categoryId){
+		List<Dish> list = dishService.list(categoryId);
+		return Result.success(list);
+	}
 }
