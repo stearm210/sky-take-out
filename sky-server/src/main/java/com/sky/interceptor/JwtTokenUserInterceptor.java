@@ -59,10 +59,10 @@ public class JwtTokenUserInterceptor implements HandlerInterceptor {
             log.info("jwt校验:{}", token);
             Claims claims = JwtUtil.parseJWT(jwtProperties.getUserSecretKey(), token);
             //令牌中获取id?
-            Long empId = Long.valueOf(claims.get(JwtClaimsConstant.EMP_ID).toString());
-            log.info("当前员工id：", empId);
+            Long userId = Long.valueOf(claims.get(JwtClaimsConstant.USER_ID).toString());
+            log.info("当前用户id：", userId);
             //拦截器已经拦截到用户的id，这时可以将对应的用户id存入线程的存储中
-            BaseContext.setCurrentId(empId);
+            BaseContext.setCurrentId(userId);
 
             //3、通过，放行
             return true;
