@@ -77,7 +77,7 @@ public class DishController {
 		dishService.deleteBatch(ids);
 
 		//调用统一的清理缓存方法
-		cleanCache("dish_");
+		cleanCache("dish_*");
 
 		return Result.success();
 	}
@@ -104,7 +104,7 @@ public class DishController {
 		dishService.updateWithFlavor(dishDTO);
 
 		//调用统一的清理缓存方法
-		cleanCache("dish_");
+		cleanCache("dish_*");
 
 		return Result.success();
 	}
@@ -120,7 +120,7 @@ public class DishController {
 		dishService.startOrStop(status,id);
 
 		//调用统一的清理缓存方法
-		cleanCache("dish_");
+		cleanCache("dish_*");
 
 		return Result.success();
 	}
