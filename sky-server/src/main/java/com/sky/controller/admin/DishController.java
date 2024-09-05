@@ -12,9 +12,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 /*
 * 菜品管理
@@ -28,6 +30,11 @@ public class DishController {
 	@Autowired
 	private DishService dishService;
 
+	//管理端同样需要对redis数据的缓存进行编写
+	//这样可以方便管理端对数据进行管理
+	@Autowired
+	private RedisTemplate redisTemplate;
+
 	/*
 	* 新增菜品函数
 	* */
@@ -37,6 +44,12 @@ public class DishController {
 	public Result save(@RequestBody DishDTO dishDTO){
 		log.info("新增菜品:{}",dishDTO);
 		dishService.saveWithFlavor(dishDTO);
+
+		//新增数据需要清理redis缓存数据
+		String key = "dish_" + dishDTO.getCategoryId();
+		//调用统一的清理缓存方法,这里只是删除了某一个key
+		cleanCache(key);
+
 		return Result.success();
 	}
 
@@ -62,6 +75,10 @@ public class DishController {
 	public Result delete(@RequestParam List<Long> ids){
 		log.info("菜品的批量删除:{}",ids);
 		dishService.deleteBatch(ids);
+
+		//调用统一的清理缓存方法
+		cleanCache("dish_");
+
 		return Result.success();
 	}
 
@@ -85,6 +102,10 @@ public class DishController {
 	public Result update(@RequestBody DishDTO dishDTO){
 		log.info("修改菜品:{}",dishDTO);
 		dishService.updateWithFlavor(dishDTO);
+
+		//调用统一的清理缓存方法
+		cleanCache("dish_");
+
 		return Result.success();
 	}
 
@@ -97,6 +118,10 @@ public class DishController {
 	///这里的id是指菜品的id
 	public Result<String> startOrStop(@PathVariable Integer status, Long id){
 		dishService.startOrStop(status,id);
+
+		//调用统一的清理缓存方法
+		cleanCache("dish_");
+
 		return Result.success();
 	}
 
@@ -110,4 +135,15 @@ public class DishController {
 		List<Dish> list = dishService.list(categoryId);
 		return Result.success(list);
 	}
+
+	/*
+	* 统一清理缓存数据的方法
+	* */
+	private void cleanCache(String pattern){
+		//将所有的菜品缓存数据清理，这里清理所有以dish_开头的key
+		Set keys = redisTemplate.keys(pattern);//首先查询到对应所有的key
+		//全部查询完成之后，再进删除操作
+		redisTemplate.delete(keys);
+	}
+
 }
