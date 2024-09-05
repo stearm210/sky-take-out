@@ -53,7 +53,7 @@
 
     <!--根据分类id查询菜品-->
     <!--由于id是会随时变动的，这里使用动态sql进行操作-->
-    <select id="list" resultType="com.sky.entity.Dish">
+    <select id="list" resultType="Dish" parameterType="Dish">
         select * from dish
         <where>
             <if test="name != null">
