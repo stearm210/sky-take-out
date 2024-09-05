@@ -40,6 +40,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 			//这个时候只需要获得第一条数据就行，直接对着第一条数据加一
 			ShoppingCart cart = list.get(0);
 			cart.setNumber(cart.getNumber() + 1);//数量加一之后，只需要执行update更新一下数据库就可以了
+			shoppingCartMapper.updateNumberById(cart);
 		}
 
 		//如果不存在，需要插入一条购物车数据
