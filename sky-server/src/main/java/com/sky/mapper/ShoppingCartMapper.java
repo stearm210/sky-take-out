@@ -24,6 +24,6 @@ public interface ShoppingCartMapper {
 	/*
 	* 插入购物车数据
 	* */
-	@Insert("INSERT into sky_take_out.shopping_cart(name, user_id, dish_id, setmeal_id, dish_flavor, amount, image,create_time)"+ "VALUES (#{name},#{userId},#{dishId},#{setmealId},#{dishFlavor},#{number},#{amount},#{image},#{createTime})")
+	@Insert("insert into sky_take_out.shopping_cart(name, user_id, dish_id, setmeal_id, dish_flavor, number, amount, image, create_time)"+ "VALUES (#{name},#{userId},#{dishId},#{setmealId},#{dishFlavor},#{number},#{amount},#{image},#{createTime})")
 	void insert(ShoppingCart shoppingCart);
 }
