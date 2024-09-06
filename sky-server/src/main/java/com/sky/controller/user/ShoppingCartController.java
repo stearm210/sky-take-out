@@ -38,7 +38,7 @@ public class ShoppingCartController {
 	@ApiOperation("查看购物车")
 	public Result<List<ShoppingCart>> list(){
 		List<ShoppingCart> list = shoppingCartService.showShoppingCart();
-		return Result.success();
+		return Result.success(list);
 	}
 
 }
