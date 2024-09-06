@@ -2,7 +2,11 @@ package com.sky.service.impl;
 
 import com.sky.context.BaseContext;
 import com.sky.dto.ShoppingCartDTO;
+import com.sky.entity.Dish;
+import com.sky.entity.Setmeal;
 import com.sky.entity.ShoppingCart;
+import com.sky.mapper.DishMapper;
+import com.sky.mapper.SetmealMapper;
 import com.sky.mapper.ShoppingCartMapper;
 import com.sky.service.ShoppingCartService;
 import lombok.extern.slf4j.Slf4j;
@@ -10,12 +14,18 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
 @Service
 @Slf4j
 public class ShoppingCartServiceImpl implements ShoppingCartService {
+	@Autowired
+	private DishMapper dishMapper;
+	@Autowired
+	private SetmealMapper setmealMapper;
+
 	@Autowired
 	private ShoppingCartMapper shoppingCartMapper;
 	/*
@@ -41,8 +51,32 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 			ShoppingCart cart = list.get(0);
 			cart.setNumber(cart.getNumber() + 1);//数量加一之后，只需要执行update更新一下数据库就可以了
 			shoppingCartMapper.updateNumberById(cart);
+		}else {
+			//如果商品在购物车中不存在，则需要在购物车中插入一条数据
+			//需要判断传入的是菜品还是套餐，菜品查菜品表，套餐查套餐表
+			//判断的方法是：判断是否存在对应的id即可
+
+			//进行判断
+			Long dishId = shoppingCartDTO.getDishId();
+			if (dishId != null){
+				//本次添加到购物车的是菜品
+				Dish dish = dishMapper.getById(dishId);
+				shoppingCart.setName(dish.getName());
+				shoppingCart.setImage(dish.getImage());
+				shoppingCart.setAmount(dish.getPrice());
+			}else {
+				//本次添加到购物车的是套餐
+				Long setmealId = shoppingCartDTO.getSetmealId();
+				Setmeal setmeal = setmealMapper.getById(setmealId);
+				shoppingCart.setName(setmeal.getName());
+				shoppingCart.setImage(setmeal.getImage());
+				shoppingCart.setAmount(setmeal.getPrice());
+			}
+			//插入的数量设置为一
+			shoppingCart.setNumber(1);
+			shoppingCart.setCreateTime(LocalDateTime.now());
+			shoppingCartMapper.insert(shoppingCart);
 		}
 
-		//如果不存在，需要插入一条购物车数据
 	}
 }
