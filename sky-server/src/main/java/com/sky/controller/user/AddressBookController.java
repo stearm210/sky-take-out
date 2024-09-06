@@ -99,6 +99,7 @@ public class AddressBookController {
     public Result<AddressBook> getDefault() {
         //SQL:select * from address_book where user_id = ? and is_default = 1
         AddressBook addressBook = new AddressBook();
+        //设立默认地址的属性为1
         addressBook.setIsDefault(1);
         addressBook.setUserId(BaseContext.getCurrentId());
         List<AddressBook> list = addressBookService.list(addressBook);
