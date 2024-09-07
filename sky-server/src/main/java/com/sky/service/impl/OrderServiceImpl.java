@@ -4,6 +4,7 @@ import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.entity.AddressBook;
+import com.sky.entity.Orders;
 import com.sky.entity.ShoppingCart;
 import com.sky.exception.AddressBookBusinessException;
 import com.sky.exception.ShoppingCartBusinessException;
@@ -13,8 +14,10 @@ import com.sky.mapper.OrderMapper;
 import com.sky.mapper.ShoppingCartMapper;
 import com.sky.service.OrderService;
 import com.sky.vo.OrderSubmitVO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class OrderServiceImpl implements OrderService {
@@ -36,7 +39,7 @@ public class OrderServiceImpl implements OrderService {
 	* */
 	@Override
 	public OrderSubmitVO submitOrder(OrdersSubmitDTO ordersSubmitDTO) {
-		//处理各种业务异常(地址簿为空，购物车数据为空)
+		//1.处理各种业务异常(地址簿为空，购物车数据为空)
 		AddressBook addressBook = addressBookMapper.getById(ordersSubmitDTO.getAddressBookId());
 		//无法正常下单(地址为空时)
 		if (addressBook == null){
@@ -54,14 +57,36 @@ public class OrderServiceImpl implements OrderService {
 			throw new ShoppingCartBusinessException(MessageConstant.SHOPPING_CART_IS_NULL);
 		}
 
-		//向订单表插入一条数据
+		//2.向订单表插入一条数据
+		//创建一个订单对象
+		Orders orders = new Orders();
+		//对象的属性拷贝进行填充
+		BeanUtils.copyProperties(ordersSubmitDTO,orders);
+		//设置当前时间
+		orders.setOrderTime(LocalDateTime.now());
+		//设置支付状态
+		orders.setPayStatus(Orders.UN_PAID);
+		//设置状态
+		orders.setStatus(Orders.PENDING_PAYMENT);
+		//订单号
+		orders.setNumber(String.valueOf(System.currentTimeMillis()));
+		//手机号
+		orders.setPhone(addressBook.getPhone());
+		//收货人
+		orders.setConsignee(addressBook.getConsignee());
+		//当前订单属于哪个用户
+		orders.setUserId(userId);
+		orderMapper.insert(orders);
+
+		//3.向订单明细表插入n条数据
 
 
-		//向订单明细表插入n条数据
+		//4.清空当前用户的购物车数据
 
-		//清空当前用户的购物车数据
 
-		//封装VO返回的结果
+		//5.封装VO返回的结果
+
+
 		return null;
 	}
 }
