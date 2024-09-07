@@ -15,4 +15,10 @@ public interface UserMapper {
 	* 这里可能用到动态sql，因此使用xml文件进行编写
 	* */
 	void insert(User user);
+
+	/*
+	* 获取用户的id
+	* */
+	@Select("select * from user where id = #{id}")
+	User getById(Long userId);
 }
