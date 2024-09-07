@@ -4,6 +4,7 @@ import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.entity.AddressBook;
+import com.sky.entity.OrderDetail;
 import com.sky.entity.Orders;
 import com.sky.entity.ShoppingCart;
 import com.sky.exception.AddressBookBusinessException;
@@ -16,10 +17,13 @@ import com.sky.service.OrderService;
 import com.sky.vo.OrderSubmitVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class OrderServiceImpl implements OrderService {
 	//订单表
 	@Autowired
@@ -78,15 +82,35 @@ public class OrderServiceImpl implements OrderService {
 		orders.setUserId(userId);
 		orderMapper.insert(orders);
 
+		//进行批量插入
+		List<OrderDetail> orderDetailList = new ArrayList<>();
 		//3.向订单明细表插入n条数据
+		//进行for循环遍历
+		for (ShoppingCart cart : shoppingCartList) {
+			//订单明细
+			OrderDetail orderDetail = new OrderDetail();
+			//进行批量属性赋值
+			BeanUtils.copyProperties(cart, orderDetail);
+			//设置当前订单明细关联的订单id
+			orderDetail.setOrderId(orders.getId());
+			orderDetailList.add(orderDetail);
 
+		}
+		//批量插入操作
+		orderDetailMapper.insertBatch(orderDetailList);
 
 		//4.清空当前用户的购物车数据
-
+		shoppingCartMapper.deleteByUserId(userId);
 
 		//5.封装VO返回的结果
+		//通过下面的方法进行构建
+		OrderSubmitVO orderSubmitVO = OrderSubmitVO.builder()
+				.id(orders.getId())
+				.orderTime(orders.getOrderTime())
+				.orderNumber(orders.getNumber())
+				.orderAmount(orders.getAmount())
+				.build();
 
-
-		return null;
+		return orderSubmitVO;
 	}
 }
