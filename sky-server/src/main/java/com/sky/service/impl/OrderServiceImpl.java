@@ -59,7 +59,6 @@ public class OrderServiceImpl implements OrderService {
 		List<ShoppingCart> shoppingCartList = shoppingCartMapper.list(shoppingCart);
 		//购物车数据为空
 		if (shoppingCartList == null || shoppingCartList.size() == 0 ){
-
 			//业务异常
 			throw new ShoppingCartBusinessException(MessageConstant.SHOPPING_CART_IS_NULL);
 		}
