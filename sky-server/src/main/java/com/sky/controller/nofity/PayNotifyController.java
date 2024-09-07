@@ -30,6 +30,7 @@ public class PayNotifyController {
     @Autowired
     private OrderService orderService;
     @Autowired
+
     private WeChatProperties weChatProperties;
 
     /**
