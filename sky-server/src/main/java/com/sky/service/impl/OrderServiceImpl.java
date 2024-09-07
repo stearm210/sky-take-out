@@ -18,6 +18,7 @@ import com.sky.vo.OrderSubmitVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -41,6 +42,8 @@ public class OrderServiceImpl implements OrderService {
 	/*
 	* 用户下单
 	* */
+	//加上事务操作，保持事务的一致性
+	@Transactional
 	@Override
 	public OrderSubmitVO submitOrder(OrdersSubmitDTO ordersSubmitDTO) {
 		//1.处理各种业务异常(地址簿为空，购物车数据为空)
