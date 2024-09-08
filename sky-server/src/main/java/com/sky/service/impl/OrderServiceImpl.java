@@ -1,5 +1,6 @@
 package com.sky.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -20,6 +21,7 @@ import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
 
+import com.sky.websocket.WebSocketServer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +32,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,6 +58,10 @@ public class OrderServiceImpl implements OrderService {
 	private WeChatPayUtil weChatPayUtil;
 	@Autowired
 	private UserMapper userMapper;
+
+	//用户来单提醒
+	@Autowired
+	private WebSocketServer webSocketServer;
 
 	/*
 	* 用户下单
@@ -166,6 +174,9 @@ public class OrderServiceImpl implements OrderService {
 	 *
 	 * @param outTradeNo
 	 */
+	/*
+	* 支付成功之后，显示来单成功的消息
+	* */
 	public void paySuccess(String outTradeNo) {
 
 		// 根据订单号查询订单
@@ -180,6 +191,22 @@ public class OrderServiceImpl implements OrderService {
 				.build();
 
 		orderMapper.update(orders);
+
+		//通过websocket向客户端推送来单之后的消息
+		//需要推送的消息有：type orderid content
+		//这里使用一个map进行封装
+		Map map = new HashMap<>();
+		//type:1表示来单提醒，2表示客户催单
+		map.put("type", 1);
+		//订单的id
+		map.put("orderId",ordersDB.getId());
+		//具体的订单号
+		map.put("content","订单号:"+outTradeNo);
+
+		//由于返回的是JSON格式，因此需要转换成json格式
+		String json = JSON.toJSONString(map);
+		//将具体的信息推送到对应的页面
+		webSocketServer.sendToAllClient(json);
 	}
 
 	/**
