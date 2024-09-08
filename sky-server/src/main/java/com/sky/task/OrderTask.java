@@ -22,9 +22,9 @@ public class OrderTask {
 	* 处理超时订单
 	* */
 	//每分钟触发一次
-	//@Scheduled(cron = "0 * * * * ? ")
+	@Scheduled(cron = "0 * * * * ? ")
 	//测试需要，这里改成了5秒一次
-	@Scheduled(cron = "1/5 * * * * ?")
+	//@Scheduled(cron = "1/5 * * * * ?")
 	public void processTimeoutOrder(){
 		log.info("定时处理超时订单:{}", LocalDateTime.now());
 		//超时订单问题
@@ -50,9 +50,9 @@ public class OrderTask {
 	* 处理一直处于派送中的订单
 	* */
 	//每天凌晨一点触发一次
-	//@Scheduled(cron = "0 0 1 * * ?")
+	@Scheduled(cron = "0 0 1 * * ?")
 	//测试需要，这里改成了5秒一次
-	@Scheduled(cron = "0/5 * * * * ?")
+	//@Scheduled(cron = "0/5 * * * * ?")
 	public void processDeliveryOrder(){
 		log.info("定时处理一直处于派送中的订单:{}", LocalDateTime.now());
 		//计算时间,上一个钟一直处于派送中的订单
