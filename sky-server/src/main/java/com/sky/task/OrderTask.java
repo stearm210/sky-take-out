@@ -51,7 +51,7 @@ public class OrderTask {
 	@Scheduled(cron = "0 0 1 * * ?")
 	public void processDeliveryOrder(){
 		log.info("定时处理一直处于派送中的订单:{}", LocalDateTime.now());
-		//计算时间,上一个工作日一直处于派送中的订单
+		//计算时间,上一个钟一直处于派送中的订单
 		LocalDateTime time = LocalDateTime.now().plusMinutes(-60);
 		List<Orders> ordersList = orderMapper.getByStatusAndOrderTimeLT(Orders.DELIVERY_IN_PROGRESS, time);
 		if (ordersList != null && ordersList.size() > 0) {
