@@ -22,7 +22,9 @@ public class OrderTask {
 	* 处理超时订单
 	* */
 	//每分钟触发一次
-	@Scheduled(cron = "0 * * * * ? ")
+	//@Scheduled(cron = "0 * * * * ? ")
+	//测试需要，这里改成了5秒一次
+	@Scheduled(cron = "1/5 * * * * ?")
 	public void processTimeoutOrder(){
 		log.info("定时处理超时订单:{}", LocalDateTime.now());
 		//超时订单问题
