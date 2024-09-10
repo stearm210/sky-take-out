@@ -69,4 +69,9 @@ public interface OrderMapper {
 	* 动态条件(日期)计算当天的营业额
 	* */
     Double sumByMap(Map map);
+
+	/*
+	* 根据动态条件统计订单数量
+	* */
+	Integer countByMap(Map map);
 }
