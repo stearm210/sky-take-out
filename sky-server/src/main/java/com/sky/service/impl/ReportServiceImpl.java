@@ -3,11 +3,13 @@ package com.sky.service.impl;/**
  * @date 9/9/2024
  **/
 
+import com.sky.dto.GoodsSalesDTO;
 import com.sky.entity.Orders;
 import com.sky.mapper.OrderMapper;
 import com.sky.mapper.UserMapper;
 import com.sky.service.ReportService;
 import com.sky.vo.OrderReportVO;
+import com.sky.vo.SalesTop10ReportVO;
 import com.sky.vo.TurnoverReportVO;
 import com.sky.vo.UserReportVO;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @Description:
@@ -30,9 +33,9 @@ import java.util.Map;
 @Service
 @Slf4j
 public class ReportServiceImpl implements ReportService {
-/*
-* 营业额统计操作
-* */
+    /*
+     * 营业额统计操作
+     * */
     @Autowired
     private OrderMapper orderMapper;
     @Autowired
@@ -51,8 +54,8 @@ public class ReportServiceImpl implements ReportService {
         }
 
         /*
-        * 循环查询并计算集合中的日期对应的订单金额合计
-        * */
+         * 循环查询并计算集合中的日期对应的订单金额合计
+         * */
         //存放每天的营业额
         List<Double> turnoverList = new ArrayList<>();
         for (LocalDate date : dateList){
@@ -76,8 +79,8 @@ public class ReportServiceImpl implements ReportService {
 
         //将list集合中的所有字符取出，之后变成一个字符串进行拼接
         /*
-        * 封装对应的返回结果
-        * */
+         * 封装对应的返回结果
+         * */
         return TurnoverReportVO
                 .builder()
                 .dateList(StringUtils.join(dateList,","))
@@ -86,8 +89,8 @@ public class ReportServiceImpl implements ReportService {
     }
 
     /*
-    * 指定时间区间内的用户数据进行统计
-    * */
+     * 指定时间区间内的用户数据进行统计
+     * */
     @Override
     public UserReportVO getUserStatistics(LocalDate begin, LocalDate end) {
         //存放从begin到end之间的每天对应的日期
@@ -100,12 +103,12 @@ public class ReportServiceImpl implements ReportService {
         }
 
 
-       //存放每天的新增用户数量
-       List<Integer> newUserList = new ArrayList<>();
-       //存放每天的总用户数量
-       List<Integer> totalUserList = new ArrayList<>();
+        //存放每天的新增用户数量
+        List<Integer> newUserList = new ArrayList<>();
+        //存放每天的总用户数量
+        List<Integer> totalUserList = new ArrayList<>();
 
-       //遍历出每一天的用户数量和新增用户数量
+        //遍历出每一天的用户数量和新增用户数量
         for (LocalDate date : dateList){
             //起始时间
             LocalDateTime beginTime = LocalDateTime.of(date, LocalTime.MIN);
@@ -117,9 +120,9 @@ public class ReportServiceImpl implements ReportService {
             map.put("end",endTime);
 
             //先查总用户数量
-           Integer totalUser = userMapper.countByMap(map);
+            Integer totalUser = userMapper.countByMap(map);
 
-           //之后再管新增用户数量
+            //之后再管新增用户数量
             map.put("begin",beginTime);
             Integer newUser = userMapper.countByMap(map);
 
@@ -139,8 +142,8 @@ public class ReportServiceImpl implements ReportService {
     }
 
     /*
-    * 在指定时间区间内的用户订单数据的统计操作
-    * */
+     * 在指定时间区间内的用户订单数据的统计操作
+     * */
     @Override
     public OrderReportVO getOrderStatistics(LocalDate begin, LocalDate end) {
         //存放从begin到end之间的每天对应的日期
@@ -211,4 +214,28 @@ public class ReportServiceImpl implements ReportService {
         return orderMapper.countByMap(map);
     }
 
+    /*
+     * 统计指定时间区间内的销量排名前十
+     * */
+    public SalesTop10ReportVO getSalesTop10(LocalDate begin, LocalDate end) {
+        //计算起始时间
+        LocalDateTime beginTime = LocalDateTime.of(begin, LocalTime.MIN);
+        //计算结束时间
+        LocalDateTime endTime = LocalDateTime.of(end, LocalTime.MAX);
+
+        List<GoodsSalesDTO> salesTop10 = orderMapper.getSalesTop10(beginTime, endTime);
+        //使用steam流取得集合中的菜品名字
+        List<String> names = salesTop10.stream().map(GoodsSalesDTO::getName).collect(Collectors.toList());
+        //拼接得到的名字
+        String nameList = StringUtils.join(names,",");
+
+        //获得对应的菜品数量
+        List<Integer> numbers = salesTop10.stream().map(GoodsSalesDTO::getNumber).collect(Collectors.toList());
+        String numberList = StringUtils.join(numbers,",");
+
+        //封装返回结果数据
+        return SalesTop10ReportVO.builder()
+                .nameList(nameList).numberList(numberList)
+                .build();
+    }
 }
