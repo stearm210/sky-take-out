@@ -56,7 +56,7 @@ public class ReportController {
     /*
     * 订单统计
     * */
-    @GetMapping("/userStatistics")
+    @GetMapping("/orderStatistics")
     @ApiOperation("订单统计")
     public Result<OrderReportVO> orderStatistics(
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
