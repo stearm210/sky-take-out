@@ -210,6 +210,7 @@ public class ReportServiceImpl implements ReportService {
                 .orderCompletionRate(orderCompletionRate).build();
     }
 
+
     /*
     根据对应的条件统计订单的数量
     * 查询订单的数量
